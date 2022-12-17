@@ -1,20 +1,14 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            HashMap<Integer, String> rucksacks;
-            rucksacks = importData();
-            System.out.println(rucksacks);
+            HashMap<Integer, String> rucksacks = importData();
             char[] dupes = dupeFinder(rucksacks);
-            for (int i = 0; i < dupes.length; i++) {
-                System.out.println(dupes[i]);
-            }
             int sum = counter(dupes);
-            System.out.println(sum);
+           System.out.println(sum);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -33,23 +27,17 @@ public class Main {
     }
 
     public static char[] dupeFinder(HashMap<Integer, String> rucksacks) {
-        char[] dupes = new char[300];
-
+        char[] dupes = new char[rucksacks.size()];
         for (int i = 0; i < rucksacks.size(); i++) {
-            String container1 = rucksacks.get(i).substring(0, rucksacks.get(i).length() / 2);
-            String container2 = rucksacks.get(i).substring(rucksacks.get(i).length() / 2);
-            System.out.println(container1 + " " + container2);
-            for (int j = 0; j < container1.length(); j++) {
-                boolean breakOut = false;
-                for (int k = 0; k <container2.length(); k++) {
-                    if (container1.substring(j, j + 1).equals(container2.substring(k, k + 1))) {
-                        dupes[i] = container2.charAt(k);
-                        breakOut = true;
-                        break;
-                    }
-                }
-                if (breakOut) {
-                    break;
+            HashMap<Character, Integer> container1 = new HashMap<>();
+            char[] container2 = new char[rucksacks.get(i).length() / 2];
+            for (int j = 0; j < rucksacks.get(i).length() / 2; j++) {
+                container1.put(rucksacks.get(i).charAt(j), 1);
+                container2[j] = rucksacks.get(i).charAt((rucksacks.get(i).length() / 2 + j));
+            }
+            for (int j = 0; j < container2.length; j++) {
+                if (container1.containsKey(container2[j])) {
+                    dupes[i] = container2[j];
                 }
             }
         }
